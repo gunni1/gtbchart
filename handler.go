@@ -44,7 +44,7 @@ func buildChart(chartDto TimeSeriesChartDto) chart.Chart {
 
 	series := []chart.Series{
 		chart.TimeSeries{
-			XValues: nanosToTime(chartDto.XValues),
+			XValues: millisToTime(chartDto.XTimeMillis),
 			YValues: chartDto.YValues,
 		},
 	}
@@ -64,17 +64,17 @@ func buildChart(chartDto TimeSeriesChartDto) chart.Chart {
 	return graph
 }
 
-func nanosToTime(nanos []int64) []time.Time {
-	times := make([]time.Time, len(nanos))
-	for idx, nano := range nanos {
-		times[idx] = time.Unix(0, nano)
+func millisToTime(millis []int64) []time.Time {
+	times := make([]time.Time, len(millis))
+	for idx, milli := range millis {
+		times[idx] = time.Unix(0, milli*int64(time.Millisecond))
 	}
 	return times
 }
 
 type TimeSeriesChartDto struct {
-	XCaption string
-	YCaption string
-	XValues  []int64
-	YValues  []float64
+	XCaption    string    `json:"xCaption"`
+	YCaption    string    `json:"yCaption"`
+	XTimeMillis []int64   `json:"xTimeMillis"`
+	YValues     []float64 `json:"yValues"`
 }
